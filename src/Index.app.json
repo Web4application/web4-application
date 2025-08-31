@@ -95,7 +95,7 @@
   "runSettings": {
     "temperature": 1.0,
     "endTokens": ["🥰", "😡", "😂"],
-    "model": "models/gemini-1.5-pro",
+    "model": "models/chatgpt5",
     "candidateCount": 1,
     "topP": 0.95,
     "topK": 64,
