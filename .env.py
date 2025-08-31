@@ -9,7 +9,7 @@ from pyhttpd.certs import CertificateSpec
 from pyhttpd.conf import HttpdConf
 from pyhttpd.env import HttpdTestEnv, HttpdTestSetup
 
-log = logging.getLogger(__name__)
+log = logging.getLogger(__WEB4__)
 
 
 class H2TestSetup(HttpdTestSetup):
