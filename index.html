@@ -1,45 +1,226 @@
 <!DOCTYPE HTML>
-<!-- Copyright 2014 The Flutter Authors. All rights reserved.
-Use of this source code is governed by a BSD-style license that can be
-found in the LICENSE file. -->
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Integration test. App load with flutter.js and onEntrypointLoaded API. Trusted Types enabled.</title>
+  <title>Kubu Hai – Web AI Hybrid</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="Kubu Hai" />
+  <link rel="manifest" href="manifest.json" />
 
-  <!-- Enable TrustedTypes for 'script'-->
-  <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'">
+  <!-- 🌌 UNIQUE GLASSMORPHIC NEON STYLE -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Web Test">
-  <link rel="manifest" href="manifest.json">
+    :root {
+      --neon: #00ffe5;
+      --bg-dark: #060606;
+      --glass: rgba(255, 255, 255, 0.07);
+      --border-glow: 0 0 10px var(--neon), 0 0 40px var(--neon);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top, #050505 0%, #000 100%);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #loader {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    #loader img {
+      width: 120px;
+      animation: spin 3s linear infinite;
+      filter: drop-shadow(0 0 20px var(--neon));
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 🌐 NAV BAR */
+    #kubu-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      background: var(--glass);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--border-glow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      z-index: 9999;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .nav-title {
+      font-weight: 800;
+      font-size: 1.2em;
+      color: var(--neon);
+      text-shadow: 0 0 20px var(--neon);
+    }
+
+    .nav-links button {
+      background: transparent;
+      border: 1px solid var(--neon);
+      color: var(--neon);
+      border-radius: 10px;
+      padding: 6px 12px;
+      margin-left: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .nav-links button:hover {
+      background: var(--neon);
+      color: #000;
+      box-shadow: 0 0 20px var(--neon);
+    }
+
+    /* 🤖 AI OVERLAY */
+    #aiOverlay {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 340px;
+      height: 480px;
+      background: var(--glass);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      box-shadow: var(--border-glow);
+      display: none;
+      flex-direction: column;
+      padding: 16px;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    #aiOverlay h3 {
+      color: var(--neon);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #chatBox {
+      flex: 1;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--neon) transparent;
+    }
+
+    .msg {
+      margin-bottom: 8px;
+      line-height: 1.4;
+      padding: 6px 10px;
+      border-radius: 8px;
+      max-width: 85%;
+      word-wrap: break-word;
+    }
+
+    .msg.user {
+      background: rgba(0, 255, 229, 0.15);
+      margin-left: auto;
+      color: var(--neon);
+    }
+
+    .msg.ai {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    #aiOverlay textarea {
+      height: 60px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.3);
+      color: white;
+      padding: 8px;
+      resize: none;
+    }
+
+    #aiOverlay button {
+      margin-top: 6px;
+      padding: 8px;
+      background: var(--neon);
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #aiOverlay button:hover {
+      box-shadow: 0 0 20px var(--neon);
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 480px) {
+      #aiOverlay {
+        width: 90%;
+        height: 70%;
+        right: 5%;
+        bottom: 10px;
+      }
+    }
+  </style>
+
   <script>
-    // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
-  <!-- This script adds the flutter initialization JS code -->
+
   <script src="flutter.js" defer></script>
+  <script src="custom-app.js" defer></script>
 </head>
+
 <body>
+  <div id="loader">
+    <img src="logo.png" alt="Loading..." />
+    <p>Launching <span style="color: var(--neon)">Kubu Hai</span>...</p>
+  </div>
+
   <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
+    window.addEventListener("load", function () {
       _flutter.loader.loadEntrypoint({
-        onEntrypointLoaded: onEntrypointLoaded,
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
+        serviceWorker: { serviceWorkerVersion },
+        onEntrypointLoaded: async (engineInitializer) => {
+          const appRunner = await engineInitializer.initializeEngine();
+          appRunner.runApp();
+          document.getElementById("loader").style.display = "none";
+          if (window.initCustomApp) window.initCustomApp();
         }
       });
-
-      // Once the entrypoint is ready, do things!
-      async function onEntrypointLoaded(engineInitializer) {
-        const appRunner = await engineInitializer.initializeEngine();
-        appRunner.runApp();
-      }
     });
   </script>
 </body>
