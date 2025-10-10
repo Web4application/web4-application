@@ -2,220 +2,179 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kubu Web App | Flutter Deluxe</title>
+  <title>Kubu-Hai Flutter Web – AI-Powered PWA</title>
 
-  <!-- Description & SEO -->
-  <meta name="description" content="Kubu Web App — futuristic Flutter web experience, lightning-fast, AI-ready, and immersive." />
-  <meta name="theme-color" content="#101820" />
-
-  <!-- iOS & PWA Setup -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="Kubu Web App" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <link rel="manifest" href="manifest.json" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="logo.png" />
-
-  <!-- Trusted Types for security -->
+  <!-- Enable TrustedTypes -->
   <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'">
 
-  <!-- Flutter build injection -->
-  <script>var serviceWorkerVersion = null;</script>
-  <script src="flutter.js" defer></script>
+  <!-- iOS & PWA Meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KubuHai">
+  <meta name="theme-color" content="#00d8ff">
+  <link rel="manifest" href="manifest.json" />
 
-  <!-- Custom font -->
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <!-- App Icons -->
+  <link rel="icon" href="icon-192.png" />
+  <link rel="apple-touch-icon" href="icon-512.png" />
 
+  <!-- Styles -->
   <style>
-    * {
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    body {
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
+      background: radial-gradient(circle at 20% 30%, #000000, #0a0a0a, #111);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       overflow: hidden;
-      font-family: 'Space Grotesk', sans-serif;
-      background: radial-gradient(circle at top left, #0f2027, #203a43, #2c5364);
-      color: #f8f8f8;
     }
-
-    /* Aurora animated background */
-    .aurora {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(120deg, #00f0ff33, #ff00c333, #00ff8c33);
-      background-size: 400% 400%;
-      animation: auroraFlow 15s ease-in-out infinite;
-      z-index: 0;
-      filter: blur(80px);
-    }
-
-    @keyframes auroraFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Loader Screen */
-    .loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(15px);
-      z-index: 10;
-      transition: opacity 1.5s ease;
-    }
-
-    .loader.hidden { opacity: 0; pointer-events: none; }
-
-    /* Logo */
-    .logo {
-      width: 130px;
-      height: 130px;
-      background: url('logo.png') no-repeat center/contain;
-      filter: drop-shadow(0 0 20px #00f0ff);
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-
-    /* Dynamic loader text */
-    .loading-text {
-      margin-top: 1.5rem;
-      font-size: 1.1rem;
+    #loader {
       text-align: center;
+      animation: fadeIn 2s ease-in-out;
+    }
+    svg#logo {
+      width: 160px;
+      height: 160px;
+      filter: drop-shadow(0 0 20px #00d8ff);
+      animation: pulse 2.5s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { filter: drop-shadow(0 0 20px #00d8ff55); }
+      50% { filter: drop-shadow(0 0 45px #00d8ffaa); }
+      100% { filter: drop-shadow(0 0 20px #00d8ff55); }
+    }
+    h1 {
       font-weight: 600;
-      background: linear-gradient(90deg, #00f0ff, #ff00c3);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glow 2s ease-in-out infinite alternate;
+      font-size: 1.4rem;
+      color: #00d8ff;
+      margin-top: 25px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #00d8ff88;
     }
-
-    @keyframes glow {
-      0% { text-shadow: 0 0 5px #00f0ff; }
-      100% { text-shadow: 0 0 20px #ff00c3; }
-    }
-
-    /* Custom Cursor */
-    .cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 30px; height: 30px;
-      border: 2px solid #00f0ff;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.05s ease;
-      z-index: 9999;
-      mix-blend-mode: difference;
-    }
-
-    /* Flutter container */
-    #flutter_container {
-      width: 100%;
-      height: 100%;
-      visibility: hidden;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* No JS Fallback */
-    noscript {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #0a0a0a;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2rem;
+    #offline {
+      display: none;
       text-align: center;
-      padding: 2rem;
-      z-index: 999;
+      font-size: 1.1rem;
+      color: #bbb;
+      line-height: 1.6;
+      max-width: 90%;
+    }
+    #offline h1 {
+      color: #00d8ff;
+      margin-bottom: 10px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
+
+  <!-- Injected by Flutter -->
+  <script>var serviceWorkerVersion = null;</script>
+  <script src="flutter.js" defer></script>
 </head>
 
 <body>
-  <div class="aurora"></div>
+  <div id="loader">
+    <!-- Glowing AI SVG Logo -->
+    <svg id="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="#00d8ff" stroke-width="3" opacity="0.6"/>
+      <circle cx="50" cy="50" r="25" fill="none" stroke="#00d8ff" stroke-width="2" opacity="0.9"/>
+      <circle cx="50" cy="50" r="5" fill="#00d8ff"/>
+      <path d="M50 5 L65 20 L50 35 L35 20 Z" fill="#00d8ff99">
+        <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite"/>
+      </path>
+    </svg>
 
-  <div class="loader" id="loader">
-    <div class="logo"></div>
-    <div class="loading-text" id="loading-text">Initializing core modules...</div>
+    <h1>Loading Kubu-Hai Web...</h1>
   </div>
 
-  <div id="flutter_container"></div>
-
-  <noscript>This app requires JavaScript to run. Please enable it and reload.</noscript>
-
-  <div class="cursor" id="cursor"></div>
+  <div id="offline">
+    <h1>🚀 You’re Offline</h1>
+    <p>Kubu-Hai is waiting patiently for your connection.<br>
+    Once you’re back online, it’ll sync everything for you.</p>
+  </div>
 
   <script>
-    // Floating cursor effect
-    const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-
-    // Smart loader text rotation
-    const messages = [
-      "Initializing engine core...",
-      "Booting neural layer...",
-      "Synchronizing quantum threads...",
-      "Calibrating modules...",
-      "Launching Kubu Web..."
-    ];
-    let msgIndex = 0;
-    setInterval(() => {
-      const text = document.getElementById('loading-text');
-      text.textContent = messages[msgIndex];
-      msgIndex = (msgIndex + 1) % messages.length;
-    }, 2000);
-
-    // Time-based theme
-    const hour = new Date().getHours();
-    if (hour >= 6 && hour < 18) document.body.style.background = 'linear-gradient(180deg, #87CEFA, #203a43)';
-    else document.body.style.background = 'linear-gradient(180deg, #0f2027, #000)';
-
-    // Optional ambient sound
-    const sound = new Audio('startup.mp3');
-    sound.volume = 0.2;
-    setTimeout(() => { sound.play().catch(()=>{}); }, 1500);
-
-    // Flutter loader integration
     window.addEventListener('load', function() {
+      if (!navigator.onLine) {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('offline').style.display = 'block';
+        return;
+      }
+
       _flutter.loader.loadEntrypoint({
-        serviceWorker: { serviceWorkerVersion: serviceWorkerVersion },
         onEntrypointLoaded: async function(engineInitializer) {
           const appRunner = await engineInitializer.initializeEngine();
           appRunner.runApp();
-
-          const loader = document.getElementById('loader');
-          const flutterContainer = document.getElementById('flutter_container');
-          setTimeout(() => {
-            loader.classList.add('hidden');
-            flutterContainer.style.visibility = 'visible';
-          }, 2500);
-        }
+        },
+        serviceWorker: { serviceWorkerVersion }
       });
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('✅ Service worker registered:', reg.scope))
+          .catch(err => console.warn('⚠️ SW registration failed:', err));
+      });
+    }
+  </script>
+
+  <!-- Inline Manifest -->
+  <script type="application/manifest+json">
+  {
+    "name": "Kubu-Hai Web",
+    "short_name": "KubuHai",
+    "description": "Empowering Flutter Web with AI, Voice, and PWA Magic ✨",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0f0f0f",
+    "theme_color": "#00d8ff",
+    "icons": [
+      { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+      { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+      { "src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+  }
+  </script>
+
+  <!-- Inline Service Worker -->
+  <script id="inline-sw" type="text/javascript">
+    const CACHE_NAME = "kubu-hai-cache-v1";
+    const ASSETS = [
+      "./",
+      "./index.html",
+      "./flutter.js",
+      "./icon-192.png",
+      "./icon-512.png",
+      "./icon-maskable.png"
+    ];
+
+    self.addEventListener && self.addEventListener("install", (e) => {
+      e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
+      self.skipWaiting && self.skipWaiting();
+    });
+
+    self.addEventListener && self.addEventListener("activate", (e) => {
+      e.waitUntil(
+        caches.keys().then((keys) =>
+          Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+        )
+      );
+      self.clients && self.clients.claim();
+    });
+
+    self.addEventListener && self.addEventListener("fetch", (e) => {
+      e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
     });
   </script>
 </body>
