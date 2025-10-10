@@ -3,225 +3,130 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kubu-Hai | Flutter Web Portal</title>
 
-  <title>Kubu Hai – Web AI Hybrid</title>
+  <!-- Inline PWA manifest -->
+  <link rel="manifest" href="data:application/manifest+json,{
+    &quot;name&quot;:&quot;Kubu-Hai Web&quot;,
+    &quot;short_name&quot;:&quot;KubuHai&quot;,
+    &quot;description&quot;:&quot;Empowering Flutter Web with AI, Voice, and PWA Magic ✨&quot;,
+    &quot;start_url&quot;:&quot;./index.html&quot;,
+    &quot;display&quot;:&quot;standalone&quot;,
+    &quot;orientation&quot;:&quot;portrait&quot;,
+    &quot;background_color&quot;:&quot;#0f0f0f&quot;,
+    &quot;theme_color&quot;:&quot;#00d8ff&quot;,
+    &quot;icons&quot;:[
+      {&quot;src&quot;:&quot;icon-192.png&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/png&quot;},
+      {&quot;src&quot;:&quot;icon-512.png&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/png&quot;},
+      {&quot;src&quot;:&quot;icon-maskable.png&quot;,&quot;sizes&quot;:&quot;512x512&quot;,&quot;type&quot;:&quot;image/png&quot;,&quot;purpose&quot;:&quot;maskable&quot;}
+    ]
+  }">
+
+  <meta name="theme-color" content="#121212">
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="Kubu Hai" />
-  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kubu-Hai" />
+  <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'">
+  <link rel="icon" href="icon.png" />
 
-  <!-- 🌌 UNIQUE GLASSMORPHIC NEON STYLE -->
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-
-    :root {
-      --neon: #00ffe5;
-      --bg-dark: #060606;
-      --glass: rgba(255, 255, 255, 0.07);
-      --border-glow: 0 0 10px var(--neon), 0 0 40px var(--neon);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background: radial-gradient(circle at top, #050505 0%, #000 100%);
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    #loader {
-      text-align: center;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    #loader img {
-      width: 120px;
-      animation: spin 3s linear infinite;
-      filter: drop-shadow(0 0 20px var(--neon));
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* 🌐 NAV BAR */
-    #kubu-nav {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      background: var(--glass);
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      box-shadow: var(--border-glow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      z-index: 9999;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .nav-title {
-      font-weight: 800;
-      font-size: 1.2em;
-      color: var(--neon);
-      text-shadow: 0 0 20px var(--neon);
-    }
-
-    .nav-links button {
-      background: transparent;
-      border: 1px solid var(--neon);
-      color: var(--neon);
-      border-radius: 10px;
-      padding: 6px 12px;
-      margin-left: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .nav-links button:hover {
-      background: var(--neon);
-      color: #000;
-      box-shadow: 0 0 20px var(--neon);
-    }
-
-    /* 🤖 AI OVERLAY */
-    #aiOverlay {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      width: 340px;
-      height: 480px;
-      background: var(--glass);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      box-shadow: var(--border-glow);
-      display: none;
-      flex-direction: column;
-      padding: 16px;
-      overflow: hidden;
-      z-index: 9999;
-    }
-
-    #aiOverlay h3 {
-      color: var(--neon);
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    #chatBox {
-      flex: 1;
-      overflow-y: auto;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 10px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--neon) transparent;
-    }
-
-    .msg {
-      margin-bottom: 8px;
-      line-height: 1.4;
-      padding: 6px 10px;
-      border-radius: 8px;
-      max-width: 85%;
-      word-wrap: break-word;
-    }
-
-    .msg.user {
-      background: rgba(0, 255, 229, 0.15);
-      margin-left: auto;
-      color: var(--neon);
-    }
-
-    .msg.ai {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    #aiOverlay textarea {
-      height: 60px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(0,0,0,0.3);
-      color: white;
-      padding: 8px;
-      resize: none;
-    }
-
-    #aiOverlay button {
-      margin-top: 6px;
-      padding: 8px;
-      background: var(--neon);
-      border: none;
-      border-radius: 8px;
-      color: #000;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #aiOverlay button:hover {
-      box-shadow: 0 0 20px var(--neon);
-      transform: scale(1.03);
-    }
-
-    @media (max-width: 480px) {
-      #aiOverlay {
-        width: 90%;
-        height: 70%;
-        right: 5%;
-        bottom: 10px;
-      }
-    }
-  </style>
-
-  <script>
-    var serviceWorkerVersion = null;
-  </script>
-
+  <script>var serviceWorkerVersion=null;</script>
   <script src="flutter.js" defer></script>
-  <script src="custom-app.js" defer></script>
-</head>
 
+  <style>
+    :root{--primary:#00d8ff;--secondary:#ff00c3;--bg-dark:#0f0f0f;--bg-light:#f4f4f4;--glass:rgba(255,255,255,0.15);--blur:14px}
+    body{margin:0;font-family:"Inter",system-ui,sans-serif;background:var(--bg-dark);color:#fff;
+         display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;
+         transition:background .4s,color .4s}
+    body.light{background:var(--bg-light);color:#1a1a1a}
+    .container{text-align:center;padding:50px;border-radius:20px;backdrop-filter:blur(var(--blur));
+       background:var(--glass);box-shadow:0 8px 40px rgba(0,0,0,.35);width:90%;max-width:520px;animation:fadeIn 1s ease forwards}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .logo-orb{width:120px;height:120px;margin:0 auto 20px;border-radius:50%;
+       background:radial-gradient(circle at 30% 30%,var(--primary),var(--secondary));
+       box-shadow:0 0 20px var(--primary),0 0 40px var(--secondary);
+       animation:glow 3s ease-in-out infinite alternate}
+    @keyframes glow{from{box-shadow:0 0 20px var(--primary),0 0 40px var(--secondary)}
+                    to{box-shadow:0 0 40px var(--primary),0 0 80px var(--secondary)}}
+    .title{font-size:2rem;font-weight:800;background:linear-gradient(90deg,var(--primary),var(--secondary));
+           -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .subtitle{font-size:1rem;opacity:.8;margin-bottom:30px}
+    .btn{background:none;border:1px solid var(--primary);color:var(--primary);
+         border-radius:30px;padding:10px 22px;margin:5px;cursor:pointer;font-weight:600;transition:.3s}
+    .btn:hover{background:var(--primary);color:#fff}
+    body.light .btn{border-color:#333;color:#333}
+    body.light .btn:hover{background:#333;color:#fff}
+    .status{font-size:.9rem;margin-top:15px;opacity:.7}
+    .loading-spinner{width:36px;height:36px;border:4px solid rgba(255,255,255,.2);
+                     border-top:4px solid var(--primary);border-radius:50%;
+                     margin:20px auto;animation:spin 1s linear infinite}
+    @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    footer{position:absolute;bottom:10px;font-size:.75rem;opacity:.6;text-align:center;width:100%}
+  </style>
+</head>
 <body>
-  <div id="loader">
-    <img src="logo.png" alt="Loading..." />
-    <p>Launching <span style="color: var(--neon)">Kubu Hai</span>...</p>
+  <div class="container">
+    <div class="logo-orb"></div>
+    <h1 class="title">Kubu-Hai Web</h1>
+    <p class="subtitle">Empowering Flutter Web with AI, voice, and PWA magic ✨</p>
+
+    <div class="loading-spinner" id="loader"></div>
+    <p class="status" id="status">Initializing Flutter engine...</p>
+
+    <button class="btn" onclick="toggleTheme()">Toggle Theme 🌗</button>
+    <button class="btn" onclick="toggleVoice()">Voice Assistant 🎙️</button>
   </div>
 
+  <footer>© 2025 Kubu-Hai Technologies • All Rights Reserved</footer>
+
   <script>
-    window.addEventListener("load", function () {
+    function toggleTheme(){document.body.classList.toggle('light')}
+    let voiceEnabled=false;
+    function toggleVoice(){voiceEnabled=!voiceEnabled;
+       alert(voiceEnabled?'🎧 Voice Assistant Enabled':'🔇 Voice Assistant Disabled')}
+    function updateStatus(){
+       const s=document.getElementById('status');
+       s.textContent=navigator.onLine?'🟢 Online - Flutter Ready':'🔴 Offline - Some features unavailable'}
+    window.addEventListener('online',updateStatus);
+    window.addEventListener('offline',updateStatus);
+    window.addEventListener('load',()=>{
+      const loader=document.getElementById('loader');
       _flutter.loader.loadEntrypoint({
-        serviceWorker: { serviceWorkerVersion },
-        onEntrypointLoaded: async (engineInitializer) => {
-          const appRunner = await engineInitializer.initializeEngine();
-          appRunner.runApp();
-          document.getElementById("loader").style.display = "none";
-          if (window.initCustomApp) window.initCustomApp();
-        }
+        onEntrypointLoaded:async e=>{
+          const r=await e.initializeEngine();r.runApp();
+          loader.style.display='none';
+          document.getElementById('status').textContent='✅ Flutter App Loaded Successfully!'
+        },
+        serviceWorker:{serviceWorkerVersion:serviceWorkerVersion}
       });
+      updateStatus();
+      if('serviceWorker'in navigator){
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(r=>console.log('✅ SW registered:',r.scope))
+          .catch(err=>console.warn('⚠️ SW registration failed:',err));
+      }
     });
+  </script>
+
+  <!-- Inline service worker script -->
+  <script id="sw-script" type="text/plain">
+const CACHE_NAME="kubu-hai-cache-v1";
+const OFFLINE_URL="offline.html";
+const ASSETS=["./","./index.html","./flutter.js","./icon-192.png","./icon-512.png","./icon-maskable.png"];
+self.addEventListener("install",e=>{
+  e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(ASSETS)));self.skipWaiting()
+});
+self.addEventListener("activate",e=>{
+  e.waitUntil(caches.keys().then(names=>Promise.all(names.filter(n=>n!==CACHE_NAME).map(n=>caches.delete(n)))));
+  self.clients.claim()
+});
+self.addEventListener("fetch",e=>{
+  if(e.request.mode==="navigate"){
+    e.respondWith(fetch(e.request).catch(()=>caches.match(OFFLINE_URL)))
+  }else{
+    e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))
+  }
+});
   </script>
 </body>
 </html>
