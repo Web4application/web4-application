@@ -1,0 +1,217 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Web4App Quantum AI Bootloader</title>
+
+  <meta http-equiv="Content-Security-Policy" content="require-trusted-types-for 'script'">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Web4App Quantum AI Bootloader">
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at 30% 30%, #040404, #000);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      color: #fff;
+    }
+
+    /* ===== Loader Overlay ===== */
+    #loader-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 40% 40%, #050505, #000);
+      z-index: 9999;
+      transition: opacity 1.3s ease, visibility 1.3s ease;
+    }
+
+    #loader-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* ===== Logo ===== */
+    .logo {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: url('logo.png') no-repeat center/contain;
+      overflow: hidden;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 35px rgba(0, 255, 255, 0.6));
+    }
+
+    .logo::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: conic-gradient(from 0deg,
+        rgba(0,255,255,0.3),
+        rgba(255,0,255,0.3),
+        rgba(0,255,255,0.3)
+      );
+      mix-blend-mode: overlay;
+      animation: hologram 6s linear infinite;
+      border-radius: 50%;
+    }
+
+    @keyframes hologram {
+      0% { transform: rotate(0deg); opacity: 0.5; }
+      50% { opacity: 0.8; }
+      100% { transform: rotate(360deg); opacity: 0.5; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* ===== Boot Text ===== */
+    .boot-text {
+      margin-top: 25px;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #0ff, 0 0 20px #00e6ff;
+      animation: glow 1.5s ease-in-out infinite alternate;
+      text-align: center;
+    }
+
+    @keyframes glow {
+      from { opacity: 0.7; text-shadow: 0 0 5px #0ff; }
+      to { opacity: 1; text-shadow: 0 0 25px #00ffff, 0 0 50px #00e6ff; }
+    }
+
+    /* ===== Loader Bar ===== */
+    .loader {
+      margin-top: 25px;
+      width: 200px;
+      height: 8px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loader::before {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 8px;
+      background: linear-gradient(90deg, #0ff, #00f, #0ff);
+      border-radius: 10px;
+      animation: slide 1.6s linear infinite;
+    }
+
+    @keyframes slide {
+      0% { left: -60px; }
+      100% { left: 200px; }
+    }
+
+    /* ===== Floating Particles ===== */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 255, 255, 0.2);
+      animation: drift 8s infinite ease-in-out;
+    }
+
+    @keyframes drift {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-80px); opacity: 0; }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .logo { width: 120px; height: 120px; }
+      .boot-text { font-size: 1rem; }
+      .loader { width: 150px; }
+    }
+  </style>
+
+  <script>
+    var serviceWorkerVersion = null;
+  </script>
+  <script src="flutter.js" defer></script>
+</head>
+
+<body>
+  <!-- Loader Screen -->
+  <div id="loader-screen">
+    <!-- Floating Particles -->
+    <div class="particle" style="width:6px; height:6px; top:80%; left:40%; animation-delay:1s;"></div>
+    <div class="particle" style="width:8px; height:8px; top:90%; left:60%; animation-delay:3s;"></div>
+    <div class="particle" style="width:5px; height:5px; top:85%; left:30%; animation-delay:2s;"></div>
+
+    <!-- Logo + Loader -->
+    <div class="logo"></div>
+    <div class="boot-text" id="boot-text">Initializing Quantum Core...</div>
+    <div class="loader"></div>
+  </div>
+
+  <script>
+    const bootMessages = [
+      "Initializing Quantum Core...",
+      "Calibrating AI Engines...",
+      "Synchronizing Neural Modules...",
+      "Loading Flutter Runtime...",
+      "Compiling Interface Elements...",
+      "Finalizing Secure Channels...",
+      "System Online ✔️"
+    ];
+
+    let msgIndex = 0;
+    const bootText = document.getElementById("boot-text");
+
+    // Simulate AI boot messages
+    const messageInterval = setInterval(() => {
+      msgIndex++;
+      if (msgIndex < bootMessages.length) {
+        bootText.textContent = bootMessages[msgIndex];
+      }
+    }, 1000);
+
+    // Flutter Loader
+    window.addEventListener('load', function() {
+      _flutter.loader.loadEntrypoint({
+        onEntrypointLoaded: onEntrypointLoaded,
+        serviceWorker: { serviceWorkerVersion: serviceWorkerVersion }
+      });
+
+      async function onEntrypointLoaded(engineInitializer) {
+        const appRunner = await engineInitializer.initializeEngine();
+        appRunner.runApp();
+
+        // Stop message cycling once Flutter is ready
+        clearInterval(messageInterval);
+
+        // Wait for one last line and fade out
+        bootText.textContent = "Launching Web4App Environment...";
+        setTimeout(() => {
+          document.getElementById('loader-screen').classList.add('hidden');
+        }, 1500);
+      }
+    });
+  </script>
+</body>
+</html>
