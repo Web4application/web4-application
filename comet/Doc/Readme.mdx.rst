@@ -14,8 +14,6 @@ COMET is an open-source framework for MT evaluation that can be used for two pur
 * To train and develop new metrics.
 
 
-
-
 Contents:
 =========
 
